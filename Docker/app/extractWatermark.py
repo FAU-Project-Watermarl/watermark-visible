@@ -49,7 +49,7 @@ while cap.isOpened() and cap.get(cv2.CAP_PROP_POS_FRAMES) < totalFrames - 7:
     cv2.putText(frame, text, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     # Show frame
-    cv2.imshow('Frame', frame)
+    #cv2.imshow('Frame', frame)
 
     currentTime = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.0
     

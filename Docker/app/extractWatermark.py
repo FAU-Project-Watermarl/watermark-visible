@@ -65,7 +65,7 @@ while cap.isOpened() and cap.get(cv2.CAP_PROP_POS_FRAMES) < totalFrames - 7:
         # Write string to the file[]
             file.write(f"--------TEXT START-----failed for {userCombo[userComboTimeLoc]} -\n" + text + "--------- TEXT END ----------- \n")
 
-    print()
+    print(prevTime)
     prevTime = currentTime
 
     # Exit if 'q' key is pressed

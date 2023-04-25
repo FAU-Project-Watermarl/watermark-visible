@@ -54,10 +54,10 @@ subprocess.run(lowestResolutionA, shell=True)
 
 
 # split the input file into fMP4 segments using FFmpeg
-fragmentA = f'ffmpeg -y -i lowWatermarkedVideoA.mp4 -c:v h264 -flags +cgop -g 30 -hls_time 1 fragA.m3u8'
+fragmentA = f'ffmpeg -y -i watermarkedVideoA.mp4 -c:v h264 -flags +cgop -g 30 -hls_time 1 fragA.m3u8'
 subprocess.run(fragmentA, shell=True)
 
-fragmentB = f'ffmpeg -y -i lowWatermarkedVideoB.mp4 -c:v h264 -flags +cgop -g 30 -hls_time 1 fragB.m3u8'
+fragmentB = f'ffmpeg -y -i watermarkedVideoB.mp4 -c:v h264 -flags +cgop -g 30 -hls_time 1 fragB.m3u8'
 
 # select a frag of random type A or B
 subprocess.run(fragmentB, shell=True)

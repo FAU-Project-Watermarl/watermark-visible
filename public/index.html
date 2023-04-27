@@ -16,7 +16,10 @@
     <div class="container">
         <h1 class="display-1 text-center"> Watermark APP</h1>
         <div class="container text-center py-5">
-            <p class="pb-5">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ex laboriosam nemo voluptate aspernatur modi expedita quaerat, iusto, magnam porro eius provident a mollitia rem consequuntur delectus? Ullam assumenda totam fugit! sit amet consectetur adipisicing elit. Ex laboriosam nemo voluptate aspernatur m</p>
+            <p class="pb-5">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ex laboriosam nemo voluptate
+                aspernatur modi expedita quaerat, iusto, magnam porro eius provident a mollitia rem consequuntur
+                delectus? Ullam assumenda totam fugit! sit amet consectetur adipisicing elit. Ex laboriosam nemo
+                voluptate aspernatur m</p>
             <!-- <div class="row">
                 <div class="col">
                     
@@ -27,17 +30,23 @@
             </div> -->
             <!-- <input type="file" id="videoInput" name="videoInput"><br><br> -->
             <!-- <input id="input-b2" name="input-b2" type="file" class="file" data-show-preview="false"> -->
-            
-            
+
+
             <!-- <div class="custom-file mb-3">
                 <input type="file" class="custom-file-input" id="customFile" name="filename">
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div> -->
+            <!-- <form action="upload-video" method="POST">
+                
+            </form> -->
             <div class="input-group mb-3">
-                <input type="file" class="form-control" id="inputVideo">
+                <form id="uploadForm" enctype="multipart/form-data"></form>
+                <input type="file" class="form-control" id="uploadVideoInput" accept="video/mp4">
                 <label class="input-group-text" for="inputVideo">Upload</label>
-                <button type="submit" id="btn-submit" class="btn btn-primary">Submit</button>
-              </div>
+                <button type="submit" id="btn-submit" class="btn btn-primary" onclick="uploadVideo()">Submit</button>
+                </form>
+            </div>
+
         </div>
 
         <!-- <form>
@@ -54,40 +63,114 @@
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
             </div> -->
-            
-            
 
-            <div class="py-5">
-                <div class="row">
-                    <div class="col">
-                        <div class="container ">
-                            <h5 class="fs-5">Video Original </h5>
-                            <video class="form-check-video" width="320" height="240" controls>
-                                <source src="input.mp4" id="input-video" type="video/mp4">
-                                <source src="movie.ogg" type="video/ogg">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
+
+
+        <div class="py-5">
+            <div class="row">
+                <div class="col">
+                    <div class="container ">
+                        <h5 class="fs-5">Video Original </h5>
+                        <video class="form-check-video" id="videoContInput" width="320" height="240" controls>
+                            <source src="./videos/input.mp4" id="input-video" type="video/mp4">
+                            <!-- <source src="movie.ogg" type="video/ogg"> -->
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
-                    
-                    <div class="col">
-                        <div class="container">
-                            <h5 class="fs-5">Video Watermarked </h5>
-                            <video class="form-check-video" width="320" height="240" controls>
-                                <!-- <source src="../backend/x.mp4" id="output-video" type="video/mp4"> -->
-                                <source src="" id="output-video" type="video/mp4">
-                                <source src="movie.ogg" type="video/ogg">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
+                </div>
+
+                <div class="col">
+                    <div class="container">
+                        <h5 class="fs-5">Video Watermarked </h5>
+                        <video class="form-check-video" id="videoContOutput" width="320" height="240" controls>
+                            <!-- <source src="../backend/x.mp4" id="output-video" type="video/mp4"> -->
+                            <source src="./videos/shuffledWatermarkOutput.mp4" id="output-video" type="video/mp4">
+                            <!-- <source src="movie.ogg" type="video/ogg"> -->
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
-                    
                 </div>
 
             </div>
+            <div id="mydiv"></div>
+
+        </div>
         </form>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        /*
+        async function uploadVideo(){
+            //preventDefault();
+            //  uploadVideoInput  -- input file control
+            file = document.getElementById('uploadVideoInput')
+            const fileData = new FormData()
+            fileData.append('files',file)
+            document.getElementById('input-video').setAttribute('src','input-video')
+            //upload-video
+
+            console.log(...fileData)
+            const result = await $.ajax({
+                url: "/upload-video",
+                type: "post",
+               
+                data: {
+                    fileData
+                },
+                success: function (response) {
+                    
+                    console.log('success in frontend')
+                },
+                error: function (xhr) {
+                    $("#mydiv").text('error: ' + xhr.statusText + ' -- error!!');
+                }
+            });
+            
+        }
+        */
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('uploadVideoInput');
+        const submitButton = document.getElementById('btn-submit');
+
+        submitButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('myFile', fileInput.files[0]);
+
+            const outbox1=document.getElementById('videoContInput')
+                    outbox1.setAttribute('src','./videos/input.mp4');
+                    outbox1.relo
+                    const x = document.getElementById('videoContInput');
+                    x.load();
+                    x.play();
+
+            fetch('/upload-video', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result);
+                    //mutler, express-fileupload
+                    console.log('sssss')
+                    //$('#output-video').attr("src","shuffledWatermarkOutput")
+                    const outbox=document.getElementById('videoContOutput')
+                    outbox.setAttribute('src','./videos/shuffledWatermarkOutput.mp4');
+                    outbox.relo
+                    const x = document.getElementById('videoContOutput');
+                    x.load();
+                    x.play();
+
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        })
+        
+
+    </script>
 
 
 </body>

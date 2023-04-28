@@ -10,10 +10,10 @@ ls
 
 # RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 # install neccesary packages
-pip install opencv-python
-pip install pytesseract
-pip install ffmpeg
-apt install tesseract-ocr -y
+# pip install opencv-python
+# pip install pytesseract
+# pip install ffmpeg
+# apt install tesseract-ocr -y
 
 #sudo apt install tesseract-ocr -y
 

@@ -1,2 +1,4 @@
 node_modules
 Docker/videos
+public/videos
+Docker/app/input.mp4

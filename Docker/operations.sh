@@ -4,6 +4,9 @@ set -xe
 
 docker build . -t watermark-python
 docker run -i --name watermark watermark-python  
+# docker run  --name watermark -d -i  watermark-python bash
+
+
 # python shuffledWatermark.py | tee shuffle.txt
 # python extractWatermark.py | tee extract.txt
 

@@ -35,21 +35,21 @@ while cap.isOpened() and cap.get(cv2.CAP_PROP_POS_FRAMES) < totalFrames - 7:
         continue
     
     height, width, _ = frame.shape
-    roi = frame[0:int(height/8), 0:int(width/12)]
+    roi = frame[0:int(height/8), 0:int(width/10)]
 
     # Apply image processing to enhance text visibility, who know why this works
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (3, 3), 0)
     thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-    # Extract text from frame using OCR, bill finna be mad lowkey.
+    # Extract text from frame using OCR
     text = pytesseract.image_to_string(thresh)
 
     # Display text on frame
     cv2.putText(frame, text, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     # Show frame
-    #cv2.imshow('Frame', frame)
+    #cv2.imshow('Frame', roi)
 
     currentTime = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.0
     
@@ -63,9 +63,9 @@ while cap.isOpened() and cap.get(cv2.CAP_PROP_POS_FRAMES) < totalFrames - 7:
         #logs to see wtf is happening, outputted to log.txt
         with open('log.txt', 'a') as file:
         # Write string to the file[]
-            file.write(f"--------TEXT START-----failed for {userCombo[userComboTimeLoc]} -\n" + text + "--------- TEXT END ----------- \n")
+            file.write(f"--------TEXT START-----failed for {userCombo[userComboTimeLoc]} , location {userComboTimeLoc} -\n" + text + "--------- TEXT END ----------- \n")
 
-    print(prevTime)
+    #print()
     prevTime = currentTime
 
     # Exit if 'q' key is pressed

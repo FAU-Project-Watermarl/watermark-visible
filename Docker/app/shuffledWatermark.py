@@ -6,14 +6,20 @@ import json
 import random
 import ffmpeg
 
+# getting the video length
+cap = cv2.VideoCapture('input.mp4')
+total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+fps = cap.get(cv2.CAP_PROP_FPS)
+duration = total_frames / fps
+
 # some distinct watermark
 textOverlayA = 'XYZ'
 
 # manuel, change the input here based on the outputted resolultion from above.
 # Define FFmpeg command
 applyWatermarkA = (f'ffmpeg -y -i input.mp4 -filter_complex '
-              f'"[0:v]drawtext=fontfile=arial.ttf:fontsize=36:text=\'{textOverlayA}\':'
-              f'x=10:y=10:fontcolor=white@1.0:box=1:boxcolor=black@1.0,'
+              f'"[0:v]drawtext=fontfile=arial.ttf:fontsize=45*trunc(h/720):'
+              f'text=\'{textOverlayA}\':x=10:y=10:fontcolor=white@1.0:box=1:boxcolor=black@1.0,'
               f'format=yuva444p[text];[0:v][text]overlay=10:10"'
               f' -c:a copy watermarkedVideoA.mp4')
 
@@ -23,8 +29,8 @@ textOverlayB = 'UVW'
 
 # Define FFmpeg command
 applyWatermarkB = (f'ffmpeg -y -i input.mp4 -filter_complex '
-              f'"[0:v]drawtext=fontfile=arial.ttf:fontsize=36:text=\'{textOverlayB}\':'
-              f'x=10:y=10:fontcolor=white@1.0:box=1:boxcolor=black@1.0,'
+              f'"[0:v]drawtext=fontfile=arial.ttf:fontsize=45*trunc(h/720):'
+              f'text=\'{textOverlayB}\':x=10:y=10:fontcolor=white@1.0:box=1:boxcolor=black@1.0,'
               f'format=yuva444p[text];[0:v][text]overlay=10:10"'
               f' -c:a copy watermarkedVideoB.mp4')
 
@@ -68,14 +74,16 @@ with open("db.json", "r") as infile:
 userCombo = db["user1"]
 
 frags = []
-for i in range(0,7):
-    selectChoice = random.choice([0,1])
-    if(selectChoice == 0):
+
+tempUserCombo = []
+for i in range(0,int(duration)):
+    selectChoice = random.choice([textOverlayA,textOverlayB])
+    if(selectChoice == textOverlayA):
         selectedFragment = 'fragA'+ str(i) +'.ts'
-        userCombo.append(textOverlayA)
     else:
         selectedFragment = 'fragB'+ str(i) +'.ts'
-        userCombo.append(textOverlayB)
+
+    userCombo.append(selectChoice)
     frags.append(selectedFragment)
 
 with open("db.json", "w") as outfile:
@@ -88,7 +96,7 @@ with open("out.m3u8", "w") as f:
     f.write("#EXT-X-MEDIA-SEQUENCE:0\n")
     f.write("#EXT-X-INDEPENDENT-SEGMENTS\n")
     f.write("#EXT-X-DISCONTINUITY-SEQUENCE:1\n")
-    for i in range(0,7):
+    for i in range(0,int(duration)):
         f.write("#EXTINF:1.000000,\n")
         f.write(frags[i]+ '\n')
 

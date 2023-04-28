@@ -43,9 +43,14 @@
                 <form id="uploadForm" enctype="multipart/form-data"></form>
                 <input type="file" class="form-control" id="uploadVideoInput" accept="video/mp4">
                 <label class="input-group-text" for="inputVideo">Upload</label>
-                <button type="submit" id="btn-submit" class="btn btn-primary" onclick="uploadVideo()">Submit</button>
+                <button type="submit" id="btn-submit" class="btn btn-primary" >Submit</button>
                 </form>
             </div>
+            <div class="container ">
+                <p class="fs-4 text-success invisible" id="extract">Extract rate <span class="text-success" >100%</span></p>
+            </div>
+            <button type="submit" id="btn-delete" class="btn btn-danger invisible" >Delete Videos</button>
+           
 
         </div>
 
@@ -132,6 +137,7 @@
         const form = document.getElementById('uploadForm');
         const fileInput = document.getElementById('uploadVideoInput');
         const submitButton = document.getElementById('btn-submit');
+        const extractiontextbox = document.getElementById('extract')
 
         submitButton.addEventListener('click', (event) => {
             event.preventDefault();
@@ -139,12 +145,13 @@
             const formData = new FormData();
             formData.append('myFile', fileInput.files[0]);
 
-            const outbox1=document.getElementById('videoContInput')
+           /* const outbox1=document.getElementById('videoContInput')
                     outbox1.setAttribute('src','./videos/input.mp4');
-                    outbox1.relo
+                    //outbox1.relo
                     const x = document.getElementById('videoContInput');
                     x.load();
                     x.play();
+                    */
 
             fetch('/upload-video', {
                 method: 'POST',
@@ -152,23 +159,110 @@
             })
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
+                    console.log('result ->',result);
                     //mutler, express-fileupload
-                    console.log('sssss')
+                    //console.log('sssss')
                     //$('#output-video').attr("src","shuffledWatermarkOutput")
-                    const outbox=document.getElementById('videoContOutput')
-                    outbox.setAttribute('src','./videos/shuffledWatermarkOutput.mp4');
-                    outbox.relo
+                    
+                    
+                    /*const outbox=document.getElementById('videoContOutput')
+                    outbox.setAttribute('src','./videos/shuffledWatermarkOutput.mp4'); */
+                    //outbox.relo+
+                    
+                    //const x = document.getElementById('videoContOutput'); 
+                    //x.load();
+                    //x.play();
+
+                    
+                    /*
+                    const outbox1=document.getElementById('videoContInput')
+                    outbox1.setAttribute('src','./videos/input.mp4');
+                    */
+                    //outbox1.relo
+                    //const y = document.getElementById('videoContInput');
+                    //y.load();
+                    //y.play();
+                    extractiontextbox.textContent=result.message;
+                    extractiontextbox.setAttribute('class','fs-4 text-success')
                     const x = document.getElementById('videoContOutput');
+                    x.pause();
+                    //x.src='./videos/shuffledWatermarkOutput.mp4' ;
+                    x.load();
+                    //x.play();
+
+                    console.log('THIS happend')
+                    /*
+                    const outbox1=document.getElementById('videoContInput')
+                    outbox1.setAttribute('src','./videos/input.mp4');
+                    */
+                    //outbox1.relo
+                    const y = document.getElementById('videoContInput');      
+                    y.pause()
+                    //y.source="./videos/input.mp4'"       
+                    y.load();
+                    //y.play();
+
+                    const myElement = $('#btn-delete');
+                    //const z = document.getElementById('btn-delete');    
+                    //outbox1.classList.remove('invisible');
+                    myElement.removeClass('invisible');
+                }).then(()=>{
+                    /*
+                    const x = document.getElementById('videoContOutput'); 
                     x.load();
                     x.play();
+                    */
 
+                    console.log('THIS happend')
+                    /*
+                    const outbox1=document.getElementById('videoContInput')
+                    outbox1.setAttribute('src','./videos/input.mp4');
+                    */
+                    //outbox1.relo
+                    /*
+                    const y = document.getElementById('videoContInput');
+                    y.load();
+                    y.play();
+                    */
+                   
                 })
                 .catch(error => {
                     console.error(error);
                 })
         })
-        
+
+        //btn-test
+        const z = document.getElementById('btn-delete');  
+
+        z.addEventListener('click', (event) => {
+            event.preventDefault();
+            //outbox1.setAttribute('class','btn btn-danger invisible');
+            myElement = $('#btn-delete');
+                    //const z = document.getElementById('btn-delete');    
+                    //outbox1.classList.remove('invisible');
+                    myElement.toggle('invisible');
+            $.ajax({
+                url: '/delete-videos',
+                type: 'POST',
+                success: function(data) {
+                  // Do something with the data
+                  console.log(data);
+                  console.log('THIS ??')
+                  const inp = document.getElementById('videoContInput');  
+                                 
+                  inp.load();
+                 
+                  const outp = document.getElementById('videoContOutput');  
+                  //outp.pause();                  
+                  outp.load();
+                  
+                },
+                error: function(error) {
+                  // Handle any errors
+                  console.error(error);
+                }
+              });
+        })
 
     </script>
 

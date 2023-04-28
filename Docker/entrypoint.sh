@@ -22,11 +22,21 @@ ls
 # python shuffledWatermark.py | tee shuffle.txt
 # python extractWatermark.py | tee extract.txt
 
+
 python shuffledWatermark.py | tee shuffle.txt
 python extractWatermark.py | tee extract.txt
+
+
+
+#docker build . -t watermark-python
+# docker run -i --name watermark watermark-python 
+
+#docker run --name watermark -d -i  watermark-python bash
 
 
 # docker cp watermark:app/shuffle.txt /
 # docker cp watermark:app/extract.txt /
 
 
+#  docker run --name watermark -it --entrypoint bash watermark-python
+#  docker run --name watermark -it -d --entrypoint bash watermark-python

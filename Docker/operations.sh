@@ -3,9 +3,19 @@
 set -xe
 
 docker build . -t watermark-python
+#docker cp ../public/videos/input.mp4 watermark:app/input.mp4 
 docker run -i --name watermark watermark-python  
 # docker run  --name watermark -d -i  watermark-python bash
 
+
+# python shuffledWatermark.py | tee shuffle.txt
+# python extractWatermark.py | tee extract.txt
+
+# docker build . -t watermark-python
+
+#docker run --name watermark -d -i  watermark-python bash
+
+#docker exec mycontainer bash -c "python shuffledWatermark.py | tee shuffle.txt;python extractWatermark.py | tee extract.txt;"
 
 # python shuffledWatermark.py | tee shuffle.txt
 # python extractWatermark.py | tee extract.txt
@@ -22,6 +32,7 @@ docker cp watermark:app/shuffledWatermarkOutput.mp4 ../public/videos
 docker cp watermark:app/lowWatermarkedVideoB.mp4 ../public/videos
 docker cp watermark:app/lowWatermarkedVideoA.mp4 ../public/videos
 #docker cp watermark:app/. ../public/videos
+
 docker stop watermark
 docker container rm watermark
 

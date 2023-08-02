@@ -4,7 +4,7 @@ import json
 import random
 import os
 
-input_video = "input4.mp4"
+input_video = "input.mp4"
 
 output_dir = "frags"
 

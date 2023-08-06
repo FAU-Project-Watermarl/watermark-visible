@@ -5,8 +5,12 @@ import random
 import os
 
 input_video = "input.mp4"
-
 output_dir = "frags"
+textOverlayA = "ABC"
+textOverlayB = "UVW"
+dpi = 96
+font_point = 40
+border_box = 8
 
 older_exists = os.path.exists(output_dir)
 if(older_exists):
@@ -25,26 +29,37 @@ resolution_data = json.loads(result.stdout)
 
 width = resolution_data["streams"][0]["width"]
 height = resolution_data["streams"][0]["height"]
-    
-reference_resolution = (width, height)
 
-textOverlayA = "ABC"
-textOverlayB = "UVW"
+reference_resolution = (width, height)
+one_letter_size = font_point * (dpi / 72)
+measure_box = border_box * (dpi / 72)
+total_width = int(((3 * one_letter_size) + (2 * measure_box)) * .70)
+total_height = int((one_letter_size + (2 * measure_box)) * .80)
+
+# print(total_width, "total width")
+# print(total_height, "total height")
+# exit()
+# print(height, "height")
+# print(width, "width")
+# # print(reference_resolution[1])
+# # print(reference_resolution[0])
+# # print(int(50 * reference_resolution[1] / reference_resolution[0]))
+# exit()
 
 applyWatermarkA = (
     f'ffmpeg -y -i {input_video} -filter_complex '
-    f'"[0:v]drawtext=fontfile=arial.ttf:fontsize={40}:'
+    f'"[0:v]drawtext=fontfile=arial.ttf:fontsize={font_point}:'
     f'text=\'{textOverlayA}\':x=10:y=10:fontcolor=white@1.0:box=1:boxcolor=black@01.0:'
-    f'boxborderw=8,format=yuva444p[text];[0:v][text]overlay=10:10"'
+    f'boxborderw={border_box},format=yuva444p[text];[0:v][text]overlay=0:0"'
     f' -c:a copy watermarkedVideoA.mp4'
 )
 subprocess.run(applyWatermarkA, shell=True)
 
 applyWatermarkB = (
     f'ffmpeg -y -i {input_video} -filter_complex '
-    f'"[0:v]drawtext=fontfile=arial.ttf:fontsize={40}:'
+    f'"[0:v]drawtext=fontfile=arial.ttf:fontsize={font_point}:'
     f'text=\'{textOverlayB}\':x=10:y=10:fontcolor=white@1.0:box=1:boxcolor=black@1.0:'
-    f'boxborderw=8,format=yuva444p[text];[0:v][text]overlay=10:10"'
+    f'boxborderw={border_box},format=yuva444p[text];[0:v][text]overlay=0:0"'
     f' -c:a copy watermarkedVideoB.mp4'
 )
 subprocess.run(applyWatermarkB, shell=True)
@@ -78,6 +93,15 @@ subprocess.run(fragmentB, shell=True)
 with open("db.json", "r") as infile:
     db = json.load(infile)
 
+
+db["user1"] = []
+
+db["fps"] = 0
+
+db["pix_width"] = 0
+
+db["pix_height"] = 0
+
 userCombo = db["user1"]
 
 frags = []
@@ -94,6 +118,10 @@ for i in range(0,int(duration)):
     frags.append(selectedFragment)
 
 db["fps"] = fps
+
+db["pix_width"] = total_width
+
+db["pix_height"] = total_height
 
 with open("db.json", "w") as outfile:
     json.dump(db, outfile)
